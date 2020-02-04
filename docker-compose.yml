@@ -14,7 +14,9 @@ services:
         networks:
             - webappsnetwork
     api:
-        image: webapp-api
+        build:
+            dockerfile: Dockerfile
+            context: api
         restart: always
         ports:
             - '9000:9000'
