@@ -28,7 +28,7 @@ services:
         networks:
             - webappsnetwork
     mongodb:
-        image: mongo
+        image: mongo:4.0
         restart: always
         container_name: mongodb
         volumes:
