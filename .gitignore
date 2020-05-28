@@ -6,3 +6,6 @@
 # build files/directories
 data-node
 mongodata
+
+# environment
+.env

@@ -1,10 +1,12 @@
 version: '3.3'
 services:
     client:
+        container_name: client
         build:
-            dockerfile: Dockerfile
             context: client
         restart: always
+        environment:
+            REACT_APP_API_HOST_URI: ${REACT_APP_API_HOST_URI}
         ports:
             - "3000:3000"
         volumes:
@@ -13,14 +15,14 @@ services:
         networks:
             - webappsnetwork
     api:
+        container_name: api
         build:
-            dockerfile: Dockerfile
             context: api
         restart: always
         environment:
-            - MONGO_URI=mongodb:27017/webapp
+            REACT_APP_MONGODB_URI: ${REACT_APP_MONGODB_URI}
         ports:
-            - '9000:9000'
+            - "9000:9000"
         volumes:
             - ./api:/api
             - /api/node_modules
@@ -44,7 +46,7 @@ services:
             - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
             - mongodata:/data/db
         ports:
-            - 27017:27017
+            - "27017:27017"
         networks:
             - webappsnetwork
 networks: 
