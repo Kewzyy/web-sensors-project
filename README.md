@@ -24,7 +24,7 @@ Check that containers are up and running:
     
 Access db and content:
 
-    docker exec -it mongodb mongo -u "user" -p "secretPassword" --authenticationDatabase "webapp"
+    docker exec -it mongodb mongo
 
 * To modify the initial db content (collections and documents) - 
 append mongo commands to mongo-init.js file

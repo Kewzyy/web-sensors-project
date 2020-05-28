@@ -20,7 +20,7 @@ services:
             context: api
         restart: always
         environment:
-            REACT_APP_MONGODB_URI: ${REACT_APP_MONGODB_URI}
+            MONGODB_URI: ${MONGODB_URI}
         ports:
             - "9000:9000"
         volumes:
@@ -35,12 +35,10 @@ services:
         container_name: mongodb
         restart: always
         environment:
-            MONGO_INITDB_ROOT_USERNAME: user
-            MONGO_INITDB_ROOT_PASSWORD: secretPassword
             # Create a new database. Please note, the
             # /docker-entrypoint-initdb.d/mongo-init.js has to be executed
             # in order for the database to be created
-            MONGO_INITDB_DATABASE: webapp
+            MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
         volumes:
             # Add the mongo-init.js file to the Mongo DB container
             - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
@@ -49,7 +47,7 @@ services:
             - "27017:27017"
         networks:
             - webappsnetwork
-networks: 
+networks:
     webappsnetwork:
         driver: bridge
 volumes:
