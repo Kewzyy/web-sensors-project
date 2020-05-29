@@ -1,12 +1,12 @@
 So it goes like this:
-### Requirements
+### 1. Requirements
 
 * install docker 
 
   * For this you can install [docker-engine](https://docs.docker.com/engine/install/)
   * Or [docker toolbox](https://github.com/docker/toolbox/releases)
 
-### Starting the app
+### 2. Starting the app
 
 Go to your cloned repo:
 
@@ -27,15 +27,24 @@ Access db and content:
     docker exec -it mongodb mongo
 
 * To modify the initial db content (collections and documents) - 
-append mongo commands to mongo-init.js file
+append mongo commands to mongo-init.js file and delete 
+persisted mongodb volume so its content can be reinitialized:
 
-### Access the app:
+
+    docker volume rm web-project-final_mongodata
+    
+### 3. Access the app:
 
 * api (express) http://[DOCKER_URL]:9000
 * client http://[DOCKER_URL]:3000
 
-### Stopping and removing all containers
+### 4. Stopping the app and removing all containers
 When the app is no longer needed run:
 
     docker rm $(docker ps -a -q)
+    
+To remove all containers, or
+
+    docker-compose down
+
 
