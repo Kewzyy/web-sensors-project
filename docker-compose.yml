@@ -38,7 +38,7 @@ services:
             # Create a new database. Please note, the
             # /docker-entrypoint-initdb.d/mongo-init.js has to be executed
             # in order for the database to be created
-            MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+            MONGO_INITDB_DATABASE: webapp
         volumes:
             # Add the mongo-init.js file to the Mongo DB container
             - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
