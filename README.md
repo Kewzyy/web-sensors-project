@@ -1,12 +1,12 @@
-### How to get Sensor data
-* Do everything as usual
-* Go here http://192.168.99.100:9000/sensor
-    * Use JSONView for better experience
-    * If collection already exists
-        * docker exec -it mongodb mongo
-        * use webapp
-        * db.sensors.drop()
-        * Repeat the procedure.
+### 0. Sensor Data: How to
+* 1)Do everything as usual
+* 2)Go here http://192.168.99.100:9000/sensor
+    * 3) Use JSONView ext for better experience
+    * 4) If collection already exists
+        docker exec -it mongodb mongo
+        use webapp
+        db.sensors.drop()
+        Start from 1).
 
 So it goes like this:
 ### 1. Requirements
