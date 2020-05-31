@@ -1,14 +1,17 @@
-### 0. Sensor Data: How to
-* 1)Do everything as usual
-* 2)Go here http://192.168.99.100:9000/sensor
-    * Use JSONView ext for better experience
-    * If collection already exists
-       * docker exec -it mongodb mongo
-       * use webapp
-       * db.sensors.drop()
-       * Start from 1).
+### 0. Sensor Data: Fill data
+    * [192.168.99.100:9000] replace with your localhost
+    * Use JSONView Chrome extension
+    * Fill database with sensor data : http://192.168.99.100:9000/filldb
 
-So it goes like this:
+### 0.1 Sensor Data: Search by Room
+    * Rooms: 14telpa, Servertelpa, Videotelpa, Dispecerutelpa & 13telpa
+    * Use: http://192.168.99.100:9000/Room (ex. .../14telpa)
+
+### 0.2 Sensor Data: Search by Room and Type 
+    * Rooms: 14telpa, Servertelpa, Videotelpa, Dispecerutelpa & 13telpa
+    * Types: co2, temp & humidity
+    * Use: http://192.168.99.100:9000/Room/Type (ex. .../Servertelpa/humidity)
+
 ### 1. Requirements
 
 * install docker 
