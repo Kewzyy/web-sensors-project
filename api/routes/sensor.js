@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose')
 var assert = require('assert')
+var User = require('./user_model.js');
 
 router.get('', async(request, response) => {
 
@@ -25,21 +26,14 @@ const myfunction = async function(jsonArray) {
     response.json(result)
     console.log(result);
 
-    mongoose.connect('mongodb://192.168.99.100:27017/webapp', {
+    mongoose.connect(`${process.env.MONGODB_URI}webapp`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,}).then(() => console.log('DB Connected!'))
       .catch(err => {
       console.log("DB connection ERR");
       });
 
-    var Schema = mongoose.Schema
-    var clubSchema = new Schema({
-      name: String,
-    })
-   
-   var Club = mongoose.model('sensor', clubSchema)
-   
-    Club.collection.insertMany(result, function(err,r) {
+    User.collection.insertMany(result, function(err,r) {
         assert.equal(null, err);
          assert.equal(29249, r.insertedCount);
    
@@ -55,8 +49,3 @@ const myfunction = async function(jsonArray) {
 });
 
 module.exports = router;
-
-
-
-
-

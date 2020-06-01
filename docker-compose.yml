@@ -1,19 +1,19 @@
 version: '3.3'
 services:
-    client:
-        container_name: client
-        build:
-            context: client
-        restart: always
-        environment:
-            REACT_APP_API_HOST_URI: ${REACT_APP_API_HOST_URI}
-        ports:
-            - "3000:3000"
-        volumes:
-            - ./client:/client
-            - /client/node_modules
-        networks:
-            - webappsnetwork
+    # client:
+    #     container_name: client
+    #     build:
+    #         context: client
+    #     restart: always
+    #     environment:
+    #         REACT_APP_API_HOST_URI: ${REACT_APP_API_HOST_URI}
+    #     ports:
+    #         - "3000:3000"
+    #     volumes:
+    #         - ./client:/client
+    #         - /client/node_modules
+    #     networks:
+    #         - webappsnetwork
     api:
         container_name: api
         build:

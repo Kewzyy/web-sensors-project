@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('', async(request, response) => {
 
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://192.168.99.100:27017/webapp";
+    var url = process.env.MONGODB_URI;
 
 MongoClient.connect(url, function(err, db) {
     

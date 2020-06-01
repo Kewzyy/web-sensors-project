@@ -51,6 +51,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', indexRouter)
 app.use('/filldb', sensorRouter) 
 
+
 app.use('/14telpa', room14)
 app.use('/14telpa/co2', room14co2)
 app.use('/14telpa/temp', room14temp)
