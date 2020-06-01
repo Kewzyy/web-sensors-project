@@ -1,4 +1,5 @@
 ### 0. Sensor Data: Fill data
+    * ! Use /filldb route only ONCE to fill db with sensor data !
     * [192.168.99.100:9000] replace with your localhost
     * Use JSONView Chrome extension
     * Fill database with sensor data : http://192.168.99.100:9000/filldb
@@ -11,6 +12,7 @@
     * Rooms: 14telpa, Servertelpa, Videotelpa, Dispecerutelpa & 13telpa
     * Types: co2, temp & humidity
     * Use: http://192.168.99.100:9000/Room/Type (ex. .../Servertelpa/humidity)
+    
 
 ### 1. Requirements
 
@@ -49,7 +51,7 @@ persisted mongodb volume so its content can be reinitialized:
 ##### 2.1. create .env file in the root directory with the following content:
 
     REACT_APP_API_HOST_URI=http://<YOUR_DOCKER_URL>
-    MONGODB_URI=mongodb://<YOUR_DOCKER_URL>:27017/webapp
+    MONGODB_URI=mongodb://<YOUR_DOCKER_URL>:27017
     
 Then access the environment variables inside the app with:
 
