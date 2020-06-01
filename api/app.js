@@ -33,6 +33,8 @@ var roomVidco2 = require('./routes/roomVidco2')
 var roomVidtemp = require('./routes/roomVidtemp')
 var roomVidhumidity = require('./routes/roomVidhumidity')
 
+var alertsRouter = require('./routes/alerts')
+
 
 var app = express()
 
@@ -50,6 +52,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/filldb', sensorRouter) 
+app.use('/alerts', alertsRouter)
 
 
 app.use('/14telpa', room14)

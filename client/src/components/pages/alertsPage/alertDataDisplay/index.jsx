@@ -31,14 +31,8 @@ const columns = [
   },
 ];
 
-function createData(room, type, date, time, value) {
-  return { room, type, date, time, value };
-}
 
-
-
-
-export function AlertDataDisplay() {
+export function AlertDataDisplay(props) {
   const classes = styles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -52,24 +46,7 @@ export function AlertDataDisplay() {
     setPage(0);
   };
 
-  const rows = [
-    createData('Servertelpa', 'co2', '01/17/2020', '10:45:29 AM', '400'),
-    createData('Servertelpa', 'co2', '02/17/2020', '10:45:29 AM', '500'),
-    createData('Servertelpa', 'mitrums', '03/17/2020', '10:45:29 AM', '400'),
-    createData('Servertelpa', 'co2', '04/17/2020', '10:45:29 AM', '300'),
-    createData('Servertelpa', 'co2', '05/17/2020', '10:45:29 AM', '400'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-  ];
+  console.log(props.data)
 
   return (
     <Paper className={classes.root}>
@@ -89,7 +66,7 @@ export function AlertDataDisplay() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+            {props.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                   {columns.map((column) => {
@@ -109,7 +86,7 @@ export function AlertDataDisplay() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={props.data.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
