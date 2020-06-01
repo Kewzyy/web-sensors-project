@@ -46,10 +46,20 @@ persisted mongodb volume so its content can be reinitialized:
 
     docker volume rm web-project-final_mongodata
     
+##### 2.1. create .env file in the root directory with the following content:
+
+    REACT_APP_API_HOST_URI=http://<YOUR_DOCKER_URL>
+    MONGODB_URI=mongodb://<YOUR_DOCKER_URL>:27017/webapp
+    
+Then access the environment variables inside the app with:
+
+    process.env.REACT_APP_API_HOST_URI
+    process.env.MONGODB_URI
+    
 ### 3. Access the app:
 
-* api (express) http://[DOCKER_URL]:9000
-* client http://[DOCKER_URL]:3000
+* api (express) [REACT_APP_API_HOST_URI]:9000
+* client [YOUR_DOCKER_URL]:3000
 
 ### 4. Stopping the app and removing all containers
 When the app is no longer needed run:
