@@ -1,17 +1,17 @@
 ### 0. Sensor Data: Fill data
-    * ! Use /filldb route only ONCE to fill db with sensor data !
-    * [192.168.99.100:9000] replace with your localhost
+    * Use /filldb route only ONCE to fill db with sensor data /!\
+    * <DOCKER_URL> replace with yours
     * Use JSONView Chrome extension
-    * Fill database with sensor data : http://192.168.99.100:9000/filldb
+    * Fill database with sensor data (Use only initially) : http://<DOCKER_URL>/filldb
 
 ### 0.1 Sensor Data: Search by Room
     * Rooms: 14telpa, Servertelpa, Videotelpa, Dispecerutelpa & 13telpa
-    * Use: http://192.168.99.100:9000/Room (ex. .../14telpa)
+    * Use: http://{DOCKER_URL}:9000/Room (ex. .../14telpa)
 
 ### 0.2 Sensor Data: Search by Room and Type 
     * Rooms: 14telpa, Servertelpa, Videotelpa, Dispecerutelpa & 13telpa
     * Types: co2, temp & humidity
-    * Use: http://192.168.99.100:9000/Room/Type (ex. .../Servertelpa/humidity)
+    * Use: http://{DOCKER_URL}:9000/Room/Type (ex. .../Servertelpa/humidity)
     
 
 ### 1. Requirements
