@@ -47,20 +47,19 @@ function AlertsPage() {
 
   const classes = styles();
 
-  const [sensor, setSensor] = React.useState('');
-  const [room, setRoom] = React.useState('');
-  const [sensorType, setSensorType] = React.useState('');
+  const [room, setRoom] = React.useState('Servertelpa');
+  const [sensorType, setSensorType] = React.useState('co2');
 
-  const [thresholdCondition, setThresholdCondition] = React.useState('');
-  const [conditionValue, setConditionValue] = React.useState('');
+  const [thresholdCondition, setThresholdCondition] = React.useState('equal');
+  const [conditionValue, setConditionValue] = React.useState('36');
 
   const [spacing, setSpacing] = React.useState(2);
 
   const [selectedFromDate, setSelectedFromDate] = React.useState(new Date('2020-01-01T21:11:54'));
-  const [selectedToDate, setSelectedToDate] = React.useState(new Date('2020-01-10T21:11:54'));
+  const [selectedToDate, setSelectedToDate] = React.useState(new Date('2020-01-03T21:11:54'));
 
-  const handleSensorChange = (event) => {
-    setSensor(event.target.value);
+  const handleSensorTypeChange = (event) => {
+    setSensorType(event.target.value);
   };
   const handleRoomChange = (event) => {
     setRoom(event.target.value);
@@ -137,12 +136,12 @@ function AlertsPage() {
 
             <Grid item>
               <FormControl className={classes.formControl}>
-                <InputLabel id="open-select-label-sensor">Sensora tips</InputLabel>
+                <InputLabel id="open-select-label-sensorType">Sensora tips</InputLabel>
                 <Select
-                  labelId="open-select-label-sensor"
-                  id="open-select-sensor"
-                  value={sensor}
-                  onChange={handleSensorChange}
+                  labelId="open-select-label-sensorType"
+                  id="open-select-sensorType"
+                  value={sensorType}
+                  onChange={handleSensorTypeChange}
                 >
                   <MenuItem value="co2">CO2</MenuItem>
                   <MenuItem value="humidity">Mitrums</MenuItem>
@@ -171,6 +170,7 @@ function AlertsPage() {
                   id="sensor-value"
                   label="Vērtība"
                   type="number"
+                  defaultValue="36"
                   onChange={handleConditionValueChange}
                 />
               </FormControl>
@@ -204,7 +204,7 @@ function AlertsPage() {
               <ListItem>
                 <Typography variant="overline" className={classes.alertRule}>
                   <Typography variant="overline" style={{fontWeight:'bold'}}>Sensora tips: </Typography>
-                  {sensor}
+                  {sensorType}
                 </Typography>
               </ListItem>
               <ListItem>
@@ -216,9 +216,8 @@ function AlertsPage() {
             </List>
           </Grid>
           <Grid container justify="center" className={classes.alertDataRuleGrid}>
-            <Typography variant="h6" style={{margin:'10px'}}>Search query</Typography>
             <Typography variant="body2">
-                {formatQueryString(`?dateFrom=${getFormattedDateTime(selectedFromDate)}&dateTo=${getFormattedDateTime(selectedToDate)}&room=${room}&sensor=${sensor}&condition=${thresholdCondition}${conditionValue}`)}
+                {`?dateFrom=${selectedFromDate}&dateTo=${selectedToDate}&room=${room}&type=${sensorType}&condition=${thresholdCondition}${conditionValue}`}
             </Typography>
           </Grid>
         </Grid>

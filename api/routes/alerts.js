@@ -22,22 +22,26 @@ router.get('', async(request, response) => {
     var alertData = null;
 
     try {
-        var query = {};
         const collection = client.db(dbname).collection("sensors");
 
+        var dateFromISOString = '';
+        var dateToISOString = '';
+
         if(request.query.dateFrom){
-            console.log("dateFrom", request.query.dateFrom);
+            dateFromISOString = new Date(request.query.dateFrom).toISOString();
+            console.log("dateFromISOString", dateFromISOString);
         }
 
         if(request.query.dateTo){
-            console.log("dateTo", request.query.dateTo);
+            dateToISOString = new Date(request.query.dateTo).toISOString();
+            console.log("dateToISOString", dateToISOString);
         }
 
         if(request.query.room){
             console.log("room", request.query.room);
         }
 
-        if(request.query.sensor){
+        if(request.query.type){
             console.log("sensor", request.query.sensor);
         }
 
@@ -45,8 +49,63 @@ router.get('', async(request, response) => {
             console.log("condition", request.query.condition);
         }
 
-        //alertData = await collection.find(query).toArray();
+        //in db month is first (mm/dd/yyyy)
+        // 2020-01-17T00:00:00.000Z == 01/17/2020
 
+        alertData = await collection.aggregate([
+            {
+                "$match": {
+                    "$expr": {
+                        "$and": [
+                            {
+                                "$gt": [
+                                    {
+                                        "$dateFromString": {
+                                            "dateString": "$date"
+                                        }
+                                    },
+									{
+                                        "$dateFromString": {
+                                            "dateString": dateFromISOString,
+                                            "onError": "$date"
+                                        }
+                                    },
+                                ]
+                            },
+                            {
+                                "$lte": [
+                                    {
+                                        "$dateFromString": {
+                                            "dateString": "$date"
+                                        }
+                                    },
+									{
+                                        "$dateFromString": {
+                                            "dateString": dateToISOString,
+                                            "onError": "$date"
+                                        }
+                                    },
+                                ]
+                            },
+                            {
+                                "$eq": [
+                                    "$room",
+                                    request.query.room
+                                ]
+                            },
+                            {
+                                "$eq": [
+                                    "$type",
+                                    request.query.type
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]).toArray();
+
+        //console.log("alertData_3: ", alertData);
     } catch (err) {
         console.log(err);
         response.status(500).send({ error: "GET ALERT DATA FAILED" });
