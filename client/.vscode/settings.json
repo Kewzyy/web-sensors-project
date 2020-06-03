@@ -1,0 +1,16 @@
+{
+  "files.insertFinalNewline": true,
+  "standard.autoFixOnSave": true,
+  "standard.options": {
+    "parser": "babel-eslint"
+  },
+  "prettier.printWidth": 120,
+  "prettier.tabWidth": 2,
+  "prettier.singleQuote": true,
+  "prettier.jsxSingleQuote": true,
+  "prettier.useTabs": false,
+  "prettier.semi": false,
+  "prettier.jsxBracketSameLine": true,
+  "prettier.spaceBeforeFunctionParen": true,
+  "prettier.arrowParens": "avoid"
+}

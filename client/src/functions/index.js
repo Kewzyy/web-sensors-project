@@ -1,6 +1,4 @@
-
-
-export const getFormattedDateTime = (date) => {
+export const getFormattedDateTime = date => {
   let day = null
   let month = null
   let year = null
@@ -17,7 +15,10 @@ export const getFormattedDateTime = (date) => {
     hours = inputDate.getHours()
     minutes = inputDate.getMinutes()
   }
-  return `${month !== null && month < 10 ? `0${month}` : `${month}`}/${day !== null && day < 10 ? `0${day}` : `${day}`}/${year}
-          ${hours !== null && hours < 10 ? `0${hours}` : `${hours}`}:${minutes !== null && minutes < 10 ? `0${minutes}` : `${minutes}`}`
+  return `${month !== null && month < 10 ? `0${month}` : `${month}`}/${
+    day !== null && day < 10 ? `0${day}` : `${day}`
+  }/${year}
+          ${hours !== null && hours < 10 ? `0${hours}` : `${hours}`}:${
+    minutes !== null && minutes < 10 ? `0${minutes}` : `${minutes}`
+  }`
 }
-
