@@ -63,6 +63,10 @@ Then access the environment variables inside the app with:
 * api (express) [REACT_APP_API_HOST_URI]:9000
 * client [YOUR_DOCKER_URL]:3000
 
+* pages:
+    * Alerts page: [YOUR_DOCKER_URL]:3000/alerts
+    
+
 ### 4. Stopping the app and removing all containers
 When the app is no longer needed run:
 

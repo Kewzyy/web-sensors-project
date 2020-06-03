@@ -4,56 +4,28 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
+import axios from 'axios';
+
 import { styles } from './styles';
 import { getFormattedDateTime } from './dateFormatter';
 import { AlertDataDisplay } from './alertDataDisplay/index';
-
-const formatQueryString = (string) => {
-    console.log("string to format: ", string);
-    return string.trim();
-}
-
-function createData(room, type, date, time, value) {
-  return { room, type, date, time, value };
-}
+import { mockedData } from './mockedData';
 
 function AlertsPage() {
-
-  const dummyData = [
-    createData('Servertelpa', 'co2', '01/17/2020', '10:45:29 AM', '400'),
-    createData('Servertelpa', 'co2', '02/17/2020', '10:45:29 AM', '500'),
-    createData('Servertelpa', 'mitrums', '03/17/2020', '10:45:29 AM', '400'),
-    createData('Servertelpa', 'co2', '04/17/2020', '10:45:29 AM', '300'),
-    createData('Servertelpa', 'co2', '05/17/2020', '10:45:29 AM', '400'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-    createData('Servertelpa', 'co2', '06/17/2020', '10:45:29 AM', '200'),
-  ];
 
   const classes = styles();
 
   const [room, setRoom] = React.useState('Servertelpa');
   const [sensorType, setSensorType] = React.useState('co2');
 
-  const [thresholdCondition, setThresholdCondition] = React.useState('equal');
-  const [conditionValue, setConditionValue] = React.useState('36');
-
-  const [spacing, setSpacing] = React.useState(2);
+  const [thresholdCondition, setThresholdCondition] = React.useState('eq');
+  const [conditionValue, setConditionValue] = React.useState('400');
 
   const [selectedFromDate, setSelectedFromDate] = React.useState(new Date('2020-01-01T21:11:54'));
   const [selectedToDate, setSelectedToDate] = React.useState(new Date('2020-01-03T21:11:54'));
@@ -77,21 +49,39 @@ function AlertsPage() {
     setConditionValue(event.target.value);
   };
 
+  const [ apiResponse, setApiResponse ] = React.useState(null)
+
+  React.useEffect(() => {
+    async function getAlertData() {
+      const result = await axios.get(
+        process.env.REACT_APP_API_HOST_URI +
+        ':9000/alerts' +
+        `?dateFrom=${selectedFromDate}&dateTo=${selectedToDate}&room=${room}&type=${sensorType}&condition=${thresholdCondition}-${conditionValue}`,
+      );
+
+      setApiResponse(result.data);
+    }
+    getAlertData();
+  }, [selectedFromDate, selectedToDate, room, sensorType, thresholdCondition, conditionValue]);
+
+
+
   return (
     <React.Fragment>
       <Grid container justify="center">
-        <Typography variant="h5" justify="center" className={classes.title}>
+        <Typography component={'span'} variant="h5" justify="center" className={classes.title}>
           Brīdinājumu pārskats
         </Typography>
       </Grid>
       <Grid container className={classes.root} spacing={5}>
         <Grid item xs={12}>
-          <Grid container justify="center" spacing={spacing}>
+          <Grid container justify="center" spacing={React.useState(2)}>
             <form className={classes.datetimeContainer} noValidate>
               <TextField
                 id="datetime-local-from"
                 label="Datums no"
                 type="datetime-local"
+                defaultValue="2020-01-01T21:11:54"
                 className={classes.dateTimeTextField}
                 onChange={handleDateFromChange}
                 InputLabelProps={{
@@ -104,6 +94,7 @@ function AlertsPage() {
                 id="datetime-local-to"
                 label="Datums līdz"
                 type="datetime-local"
+                defaultValue="2020-01-03T21:11:54"
                 className={classes.dateTimeTextField}
                 onChange={handleDateToChange}
                 InputLabelProps={{
@@ -115,7 +106,7 @@ function AlertsPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <Grid container justify="center" spacing={spacing}>
+          <Grid container justify="center" spacing={React.useState(2)}>
             <Grid item>
               <FormControl className={classes.formControl}>
                 <InputLabel id="open-select-label-room">Telpa</InputLabel>
@@ -159,9 +150,9 @@ function AlertsPage() {
                   value={thresholdCondition}
                   onChange={handleThresholdConditionChange}
                 >
-                  <MenuItem value="lessthan">Mazāk par</MenuItem>
-                  <MenuItem value="equal">Vienāds ar</MenuItem>
-                  <MenuItem value="morethan">Vairāk par</MenuItem>
+                  <MenuItem value="gt">Vairāk par</MenuItem>
+                  <MenuItem value="eq">Vienāds ar</MenuItem>
+                  <MenuItem value="lt">Mazāk par</MenuItem>
                 </Select>
 
               </FormControl>
@@ -170,7 +161,7 @@ function AlertsPage() {
                   id="sensor-value"
                   label="Vērtība"
                   type="number"
-                  defaultValue="36"
+                  defaultValue="400"
                   onChange={handleConditionValueChange}
                 />
               </FormControl>
@@ -181,50 +172,50 @@ function AlertsPage() {
 
         <Grid item xs={12}>
           <Grid container justify="center" className={classes.alertDataRuleGrid}>
-            <Typography variant="h6" style={{margin:'10px'}}>Brīdinājumu likumi</Typography>
+            <Typography component={'span'} variant="h6" style={{margin:'10px'}}>Brīdinājumu likumi</Typography>
             <List className={classes.root}>
               <ListItem>
-                <Typography variant="overline" className={classes.alertRule}>
-                  <Typography variant="overline" style={{fontWeight:'bold'}}>Datums no: </Typography>
+                <Typography component={'span'} variant="overline" className={classes.alertRule}>
+                  <Typography component={'span'} variant="overline" style={{fontWeight:'bold'}}>Datums no: </Typography>
                   {getFormattedDateTime(selectedFromDate)}
                 </Typography>
               </ListItem>
               <ListItem>
-                <Typography variant="overline" className={classes.alertRule}>
-                  <Typography variant="overline" style={{fontWeight:'bold'}}>Datums līdz: </Typography>
+                <Typography component={'span'} variant="overline" className={classes.alertRule}>
+                  <Typography component={'span'} variant="overline" style={{fontWeight:'bold'}}>Datums līdz: </Typography>
                   {getFormattedDateTime(selectedToDate)}
                 </Typography>
               </ListItem>
               <ListItem>
-                <Typography variant="overline" className={classes.alertRule}>
-                  <Typography variant="overline" style={{fontWeight:'bold'}}>Telpa: </Typography>
+                <Typography component={'span'} variant="overline" className={classes.alertRule}>
+                  <Typography component={'span'} variant="overline" style={{fontWeight:'bold'}}>Telpa: </Typography>
                   {room}
                 </Typography>
               </ListItem>
               <ListItem>
-                <Typography variant="overline" className={classes.alertRule}>
-                  <Typography variant="overline" style={{fontWeight:'bold'}}>Sensora tips: </Typography>
+                <Typography component={'span'} variant="overline" className={classes.alertRule}>
+                  <Typography component={'span'} variant="overline" style={{fontWeight:'bold'}}>Sensora tips: </Typography>
                   {sensorType}
                 </Typography>
               </ListItem>
               <ListItem>
-                <Typography variant="overline" className={classes.alertRule}>
-                  <Typography variant="overline" style={{fontWeight:'bold'}}>Nosacījums: </Typography>
+                <Typography component={'span'} variant="overline" className={classes.alertRule}>
+                  <Typography component={'span'} variant="overline" style={{fontWeight:'bold'}}>Nosacījums: </Typography>
                   {' '}{thresholdCondition}{' '}{conditionValue}
                 </Typography>
               </ListItem>
             </List>
           </Grid>
           <Grid container justify="center" className={classes.alertDataRuleGrid}>
-            <Typography variant="body2">
-                {`?dateFrom=${selectedFromDate}&dateTo=${selectedToDate}&room=${room}&type=${sensorType}&condition=${thresholdCondition}${conditionValue}`}
+            <Typography component={'span'} variant="body2">
+                {`?dateFrom=${selectedFromDate}&dateTo=${selectedToDate}&room=${room}&type=${sensorType}&condition=${thresholdCondition}-${conditionValue}`}
             </Typography>
           </Grid>
         </Grid>
 
         <Grid item xs={12}>
           <Grid container className={classes.alertDataDisplayGrid}>
-            <AlertDataDisplay data={dummyData}/>
+            <AlertDataDisplay data={apiResponse ? apiResponse : mockedData}/>
           </Grid>
         </Grid>
 

@@ -46,8 +46,6 @@ export function AlertDataDisplay(props) {
     setPage(0);
   };
 
-  console.log(props.data)
-
   return (
     <Paper className={classes.root}>
       <TableContainer className={classes.container}>
