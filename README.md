@@ -50,7 +50,7 @@ persisted mongodb volume so its content can be reinitialized:
     
 ##### 2.1. create .env file in the root directory with the following content:
 
-    REACT_APP_API_HOST_URI=http://<YOUR_DOCKER_URL>
+    REACT_APP_API_HOST_URI=http://<YOUR_DOCKER_URL>:9000
     MONGODB_URI=mongodb://<YOUR_DOCKER_URL>:27017/
     
 Then access the environment variables inside the app with:

@@ -24,6 +24,9 @@ import { styles } from './styles'
 export const AlertsPage = () => {
   const classes = styles()
 
+  const defaultRooms = ['Servertelpa', '14telpa']
+  const [roomNames, setRoomNames] = React.useState(defaultRooms)
+
   const [room, setRoom] = React.useState('Servertelpa')
   const [sensorType, setSensorType] = React.useState('co2')
 
@@ -32,6 +35,8 @@ export const AlertsPage = () => {
 
   const [selectedFromDate, setSelectedFromDate] = React.useState(new Date('2020-01-01T21:11:54'))
   const [selectedToDate, setSelectedToDate] = React.useState(new Date('2020-01-03T21:11:54'))
+
+  const [alertData, setAlertData] = React.useState(null)
 
   const handleSensorTypeChange = event => {
     setSensorType(event.target.value)
@@ -52,20 +57,28 @@ export const AlertsPage = () => {
     setConditionValue(event.target.value)
   }
 
-  const [apiResponse, setApiResponse] = React.useState(null)
-
-  // This is beyond wrong
+  // This was beyond wrong
   React.useEffect(() => {
-    async function getAlertData() {
-      const result = await axios.get(
-        process.env.REACT_APP_API_HOST_URI +
-          ':9000/alerts' +
-          `?dateFrom=${selectedFromDate}&dateTo=${selectedToDate}&room=${room}&type=${sensorType}&condition=${thresholdCondition}-${conditionValue}`
-      )
+    axios.get(process.env.REACT_APP_API_HOST_URI + '/alerts', {
+      params: {
+        dateFrom: selectedFromDate,
+        dateTo: selectedToDate,
+        room: room,
+        type: sensorType,
+        condition: thresholdCondition + '-' + conditionValue
+      }
+    }).then((response) => {
+      setAlertData(response.data)
+    }).catch(err => {
+      console.log('Get Alert Data Err', err)
+    });
 
-      setApiResponse(result.data)
-    }
-    getAlertData()
+    axios.get(process.env.REACT_APP_API_HOST_URI + '/roomnames'
+    ).then((response) => {
+      setRoomNames(response.data)
+    }).catch(err => {
+      console.log('Get RoomName Data Err', err)
+    });
   }, [selectedFromDate, selectedToDate, room, sensorType, thresholdCondition, conditionValue])
   {
     /* TODO: Map entire page from config object and boom resuable component */
@@ -79,7 +92,7 @@ export const AlertsPage = () => {
       </Grid>
       <Grid container className={classes.root} spacing={5}>
         <Grid item xs={12}>
-          <Grid container justify='center' spacing={React.useState(2)}>
+          <Grid container justify='center' spacing={2}>
             <form className={classes.datetimeContainer} noValidate>
               <TextField
                 id='datetime-local-from'
@@ -110,17 +123,14 @@ export const AlertsPage = () => {
         </Grid>
 
         <Grid item xs={12}>
-          <Grid container justify='center' spacing={React.useState(2)}>
+          <Grid container justify='center' spacing={2}>
             <Grid item>
               <FormControl className={classes.formControl}>
                 <InputLabel id='open-select-label-room'>Telpa</InputLabel>
                 <Select labelId='open-select-label-room' id='open-select-room' value={room} onChange={handleRoomChange}>
-                  {/* TODO: Map MenuItems from config */}
-                  <MenuItem value='Servertelpa'>Servertelpa</MenuItem>
-                  <MenuItem value='Videonoverosanas telpa'>Videonovērošana</MenuItem>
-                  <MenuItem value='14telpa'>14.telpa</MenuItem>
-                  <MenuItem value='Dispecerutelpa'>Dispečeru telpa</MenuItem>
-                  <MenuItem value='13telpa'>13.telpa</MenuItem>
+                  {roomNames.map((room) =>
+                    <MenuItem key={room} value={room}>{room}</MenuItem>
+                  )}
                 </Select>
               </FormControl>
             </Grid>
@@ -226,7 +236,7 @@ export const AlertsPage = () => {
         <Grid item xs={12}>
           <Grid container className={classes.alertDataDisplayGrid}>
             <Paper className={classes.paperRoot}>
-              <Table columns={columnsConfig} data={apiResponse ? apiResponse : mockedData} />
+              <Table columns={columnsConfig} data={alertData ? alertData : mockedData} />
             </Paper>
           </Grid>
         </Grid>
