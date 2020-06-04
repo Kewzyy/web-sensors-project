@@ -75,5 +75,9 @@ When the app is no longer needed run:
 To remove all containers, or
 
     docker-compose down
+    
+Commands for clearing storage
 
+    docker system prune - a
+    docker volume prune
 
