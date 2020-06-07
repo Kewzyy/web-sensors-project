@@ -50,8 +50,8 @@ persisted mongodb volume so its content can be reinitialized:
     
 ##### 2.1. create .env file in the root directory with the following content:
 
-    REACT_APP_API_HOST_URI=http://<YOUR_DOCKER_URL>
-    MONGODB_URI=mongodb://<YOUR_DOCKER_URL>:27017
+    REACT_APP_API_HOST_URI=http://<YOUR_DOCKER_URL>:9000
+    MONGODB_URI=mongodb://<YOUR_DOCKER_URL>:27017/
     
 Then access the environment variables inside the app with:
 
@@ -63,6 +63,10 @@ Then access the environment variables inside the app with:
 * api (express) [REACT_APP_API_HOST_URI]:9000
 * client [YOUR_DOCKER_URL]:3000
 
+* pages:
+    * Alerts page: [YOUR_DOCKER_URL]:3000/alerts
+    
+
 ### 4. Stopping the app and removing all containers
 When the app is no longer needed run:
 
@@ -71,5 +75,9 @@ When the app is no longer needed run:
 To remove all containers, or
 
     docker-compose down
+    
+Commands for clearing storage
 
+    docker system prune - a
+    docker volume prune
 

@@ -1,12 +1,12 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles'
 
-export const styles = makeStyles((theme) => ({
+export const styles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    width: "100%",
+    width: '100%',
   },
   title: {
-    margin: "50px",
+    margin: '50px',
   },
   paper: {
     padding: theme.spacing(1),
@@ -23,14 +23,14 @@ export const styles = makeStyles((theme) => ({
   },
   thresholdConditionGrid: {
     border: '1px solid #ced4da',
-    marginLeft: "30px",
+    marginLeft: '30px',
   },
   alertDataRuleGrid: {
     border: '1px solid #ced4da',
-    margin: "20px",
+    margin: '20px',
   },
   alertDataDisplayGrid: {
-    margin: "20px",
+    margin: '20px',
   },
   datetimeContainer: {
     display: 'flex',
@@ -42,4 +42,7 @@ export const styles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     width: 300,
   },
-}));
+  paperRoot: {
+    width: '100%',
+  },
+}))
