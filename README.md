@@ -12,6 +12,17 @@
     * Rooms: 14telpa, Servertelpa, Videotelpa, Dispecerutelpa & 13telpa
     * Types: co2, temp & humidity
     * Use: http://{DOCKER_URL}:9000/Room/Type (ex. .../Servertelpa/humidity)
+
+### 0.3 Sensor Data: Add NEW sensor
+    * Use: Through Postman POST method <> New Sensor 
+    * http://{DOCKER_URL}:9000/filldb/add
+    * JSON body format - Example {
+        "room":"x room",
+        "type":"y type",
+        "date":"z date",
+        "time":"w time",
+        "value":"9"
+    }
     
 
 ### 1. Requirements
