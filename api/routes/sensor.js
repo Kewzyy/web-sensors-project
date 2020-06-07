@@ -44,8 +44,33 @@ const myfunction = async function(jsonArray) {
   }
   
  start();
-//  response.send('POST request to the homepage')
 
+});
+
+router.post('/add', async(req,res) => {
+  var MongoClient = require('mongodb').MongoClient;
+  var url = process.env.MONGODB_URI;
+
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("webapp");
+
+  var sensorToInsert = {
+      room: req.body.room,
+      type: req.body.type,
+      date: req.body.date,
+      time: req.body.time,
+      value: req.body.value
+  };
+
+  dbo.collection("sensors").insertOne(sensorToInsert, function(err,r) {
+      if (err) throw err;
+      console.log(sensorToInsert);
+      res.json(sensorToInsert)
+      db.close();
+    });
+
+});
 });
 
 module.exports = router;

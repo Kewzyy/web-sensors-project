@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 const cors = require('cors')
 
+var addRouter = require('./routes/add')
 var indexRouter = require('./routes/index')
 var sensorRouter = require('./routes/sensor')
 var room14 = require('./routes/room14')
@@ -50,7 +51,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/filldb', sensorRouter) 
-
+app.use('/sensor', addRouter) 
 
 app.use('/14telpa', room14)
 app.use('/14telpa/co2', room14co2)
