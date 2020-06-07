@@ -54,12 +54,16 @@ router.post('/add', async(req,res) => {
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
   var dbo = db.db("webapp");
+  
+  var date_created = new Date()
+  var date_pretty = date_created.toLocaleDateString()
+  var time_pretty = date_created.toLocaleTimeString()
 
   var sensorToInsert = {
       room: req.body.room,
       type: req.body.type,
-      date: req.body.date,
-      time: req.body.time,
+      date: date_pretty,
+      time: time_pretty,
       value: req.body.value
   };
 

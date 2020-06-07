@@ -17,11 +17,9 @@
     * Use: Through Postman POST method <> New Sensor 
     * http://{DOCKER_URL}:9000/filldb/add
     * JSON body format - Example {
-        "room":"x room",
-        "type":"y type",
-        "date":"z date",
-        "time":"w time",
-        "value":"9"
+        "room":"Nice room",
+        "type":"Nice type",
+        "value":"69"
     }
     
 
