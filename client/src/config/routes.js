@@ -1,5 +1,6 @@
-import { AlertsPage } from '../components/pages/alerts-page'
-import { TestPage } from '../components/pages/test-page'
+import { AlertsPage } from '../components/pages/alerts-page/'
+import { LandingPage } from '../components/pages/landing-page'
+
 export const routes = [
   {
     key: 'Landing',
@@ -15,6 +16,6 @@ export const routes = [
   {
     key: 'DashboardKey',
     path: '/dashboard',
-    component: TestPage,
+    component: LandingPage,
   },
 ]
