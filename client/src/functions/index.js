@@ -22,3 +22,8 @@ export const getFormattedDateTime = date => {
     minutes !== null && minutes < 10 ? `0${minutes}` : `${minutes}`
   }`
 }
+
+
+export const smartHistory = (history, path) => {
+
+}

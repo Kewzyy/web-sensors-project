@@ -1,3 +1,5 @@
+import { makeStyles } from '@material-ui/core'
+
 export const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
@@ -38,5 +40,8 @@ export const useStyles = makeStyles(theme => ({
     paddingRight: 30,
     paddingTop: 50,
     paddingBottom: 50,
+  },
+  pickers: {
+    display: 'flex',
   },
 }))

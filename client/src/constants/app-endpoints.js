@@ -1,0 +1,5 @@
+export const LANDING_PATH = '/'
+export const CHARTS_PATH = '/charts'
+export const FLOOR_PLAN_PATH = '/floor-plan'
+export const ALERTS_PATH = '/alerts'
+export const REAL_TIME_DATA_PATH = '/real-time-test'

@@ -1,27 +1,40 @@
 import { AlertsPage } from '../components/pages/alerts-page/'
 import { LandingPage } from '../components/pages/landing-page'
 import { FloorPlansPage } from '../components/pages/floor-plan-page'
+import { DataOverviewPage } from '../components/pages/data-overview-page'
+import {
+  LANDING_PATH,
+  ALERTS_PATH,
+  FLOOR_PLAN_PATH,
+  CHARTS_PATH,
+  REAL_TIME_DATA_PATH,
+} from '../constants'
 
 export const routes = [
   {
     key: 'Landing',
-    path: '/',
-    component: AlertsPage,
+    path: LANDING_PATH,
+    component: LandingPage,
     exact: true,
   },
   {
     key: 'AlertsPageKey',
-    path: '/alerts',
+    path: ALERTS_PATH,
     component: AlertsPage,
   },
   {
     key: 'FloorPlansPageKey',
-    path: '/floor-plan',
+    path: FLOOR_PLAN_PATH,
     component: FloorPlansPage,
   },
   {
-    key: 'DashboardKey',
-    path: '/dashboard',
+    key: 'ChartsKey',
+    path: CHARTS_PATH,
+    component: DataOverviewPage,
+  },
+  {
+    key: 'RealTimeDataKey',
+    path: REAL_TIME_DATA_PATH,
     component: LandingPage,
   },
 ]

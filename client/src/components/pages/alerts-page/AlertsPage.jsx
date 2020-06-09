@@ -60,33 +60,34 @@ export const AlertsPage = () => {
 
   // Almost beauty
   React.useEffect(() => {
-    axios.get(process.env.REACT_APP_API_HOST_URI + '/alerts', {
-      params: {
-        dateFrom: selectedFromDate,
-        dateTo: selectedToDate,
-        room: room,
-        type: sensorType,
-        condition: thresholdCondition + '-' + conditionValue
-      }
-    }).then((response) => {
-      setAlertData(response.data)
-    }).catch(err => {
-      console.log('Get Alert Data Err', err)
-    });
+    axios
+      .get(process.env.REACT_APP_API_HOST_URI + '/alerts', {
+        params: {
+          dateFrom: selectedFromDate,
+          dateTo: selectedToDate,
+          room: room,
+          type: sensorType,
+          condition: thresholdCondition + '-' + conditionValue,
+        },
+      })
+      .then(response => {
+        setAlertData(response.data)
+      })
+      .catch(err => {
+        console.log('Get Alert Data Err', err)
+      })
 
     getDistinctRooms()
-      .then((response) => {
-        console.log("response.data", response.data);
+      .then(response => {
+        console.log('response.data', response.data)
         var roomNames = []
-        response.data.map(roomObj => (
-          roomNames.push(roomObj.room)
-        ))
+        response.data.map(roomObj => roomNames.push(roomObj.room))
         setRoomNames(roomNames)
-      }).catch((err) => {
+      })
+      .catch(err => {
         console.log('Get RoomName Data Err', err)
-      });
-
- }, [selectedFromDate, selectedToDate, room, sensorType, thresholdCondition, conditionValue])
+      })
+  }, [selectedFromDate, selectedToDate, room, sensorType, thresholdCondition, conditionValue])
 
   /* TODO: Map entire page from config object and boom resuable component */
   return (
@@ -128,15 +129,22 @@ export const AlertsPage = () => {
             <Grid item>
               <FormControl className={classes.formControl}>
                 <InputLabel id='open-select-label-room'>Telpa</InputLabel>
-                <Select labelId='open-select-label-room' id='open-select-room' value={room} onChange={handleRoomChange}>
-
-                  {roomNames && roomNames.length > 0 ? roomNames.map(room => (
-                    <MenuItem key={room} value={room}>
-                      {room}
+                <Select
+                  labelId='open-select-label-room'
+                  id='open-select-room'
+                  value={room}
+                  onChange={handleRoomChange}>
+                  {roomNames && roomNames.length > 0 ? (
+                    roomNames.map(room => (
+                      <MenuItem key={room} value={room}>
+                        {room}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem key='Servertelpa' value='Servertelpa'>
+                      Servertelpa
                     </MenuItem>
-                  )):
-                    <MenuItem key="Servertelpa" value="Servertelpa">Servertelpa</MenuItem>
-                  }
+                  )}
                 </Select>
               </FormControl>
             </Grid>
