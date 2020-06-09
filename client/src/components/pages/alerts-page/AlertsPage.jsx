@@ -17,6 +17,8 @@ import {
 import { Table } from '../../blocks/Table'
 import { getFormattedDateTime } from '../../../functions'
 
+import { getDistinctRooms } from '../../../apis/requests'
+
 import { columnsConfig } from '../../../config/alert-table-columns'
 import { mockedData } from './mockedData'
 import { styles } from './styles'
@@ -24,8 +26,7 @@ import { styles } from './styles'
 export const AlertsPage = () => {
   const classes = styles()
 
-  const defaultRooms = ['Servertelpa', '14telpa']
-  const [roomNames, setRoomNames] = React.useState(defaultRooms)
+  const [roomNames, setRoomNames] = React.useState([])
 
   const [room, setRoom] = React.useState('Servertelpa')
   const [sensorType, setSensorType] = React.useState('co2')
@@ -59,32 +60,33 @@ export const AlertsPage = () => {
 
   // Almost beauty
   React.useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_API_HOST_URI + '/alerts', {
-        params: {
-          dateFrom: selectedFromDate,
-          dateTo: selectedToDate,
-          room: room,
-          type: sensorType,
-          condition: thresholdCondition + '-' + conditionValue,
-        },
-      })
-      .then(response => {
-        setAlertData(response.data)
-      })
-      .catch(err => {
-        console.log('Get Alert Data Err', err)
-      })
+    axios.get(process.env.REACT_APP_API_HOST_URI + '/alerts', {
+      params: {
+        dateFrom: selectedFromDate,
+        dateTo: selectedToDate,
+        room: room,
+        type: sensorType,
+        condition: thresholdCondition + '-' + conditionValue
+      }
+    }).then((response) => {
+      setAlertData(response.data)
+    }).catch(err => {
+      console.log('Get Alert Data Err', err)
+    });
 
-    axios
-      .get(process.env.REACT_APP_API_HOST_URI + '/roomnames')
-      .then(response => {
-        setRoomNames(response.data)
-      })
-      .catch(err => {
+    getDistinctRooms()
+      .then((response) => {
+        console.log("response.data", response.data);
+        var roomNames = []
+        response.data.map(roomObj => (
+          roomNames.push(roomObj.room)
+        ))
+        setRoomNames(roomNames)
+      }).catch((err) => {
         console.log('Get RoomName Data Err', err)
-      })
-  }, [selectedFromDate, selectedToDate, room, sensorType, thresholdCondition, conditionValue])
+      });
+
+ }, [selectedFromDate, selectedToDate, room, sensorType, thresholdCondition, conditionValue])
 
   /* TODO: Map entire page from config object and boom resuable component */
   return (
@@ -127,11 +129,14 @@ export const AlertsPage = () => {
               <FormControl className={classes.formControl}>
                 <InputLabel id='open-select-label-room'>Telpa</InputLabel>
                 <Select labelId='open-select-label-room' id='open-select-room' value={room} onChange={handleRoomChange}>
-                  {roomNames.map(room => (
+
+                  {roomNames && roomNames.length > 0 ? roomNames.map(room => (
                     <MenuItem key={room} value={room}>
                       {room}
                     </MenuItem>
-                  ))}
+                  )):
+                    <MenuItem key="Servertelpa" value="Servertelpa">Servertelpa</MenuItem>
+                  }
                 </Select>
               </FormControl>
             </Grid>

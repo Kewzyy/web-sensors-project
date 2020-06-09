@@ -23,8 +23,8 @@ const myfunction = async function(jsonArray) {
   const start = async function() {
 
     const result = await myfunction()
-    response.json(result)
-    console.log(result);
+    //response.json(result)
+    //console.log(result);
 
     mongoose.connect(`${process.env.MONGODB_URI}webapp`, {
       useNewUrlParser: true,
@@ -39,12 +39,10 @@ const myfunction = async function(jsonArray) {
    
          mongoose.connection.close()
     })
-
-
   }
   
  start();
-
+ response.json({ msg: "DATA INSERTED"});
 });
 
 router.post('/add', async(req,res) => {

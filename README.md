@@ -79,7 +79,7 @@ Then access the environment variables inside the app with:
 ### 4. Stopping the app and removing all containers
 When the app is no longer needed run:
 
-    docker rm $(docker ps -a -q)
+    docker rm $(docker ps -a -q) -f
     
 To remove all containers, or
 
@@ -87,6 +87,6 @@ To remove all containers, or
     
 Commands for clearing storage
 
-    docker system prune - a
+    docker system prune -a
     docker volume prune
 

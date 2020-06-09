@@ -18,11 +18,27 @@ router.get('', async(request, response) => {
         return;
     }
 
-    var rooms = null;
+    var roomData = [];
 
     try {
         const collection = client.db(dbname).collection("sensors");
-        rooms = await collection.distinct("room");
+
+        var distinctRoomNames = await collection.distinct("room");
+
+        /*
+        for each distinct room do:
+            get distinct sensor types for this room
+        */
+        await Promise.all(distinctRoomNames.map(async (roomName) => {
+            var roomSensorTypes = await collection.distinct("type", { room: roomName });
+            var roomObject = {
+                room: roomName,
+                types: roomSensorTypes
+            };
+            console.log("roomObject", roomObject);
+            roomData.push(roomObject);
+        }));
+
     } catch (err) {
         console.log(err);
         response.status(500).send({ error: "GET ROOMNAME DATA FAILED" });
@@ -30,7 +46,7 @@ router.get('', async(request, response) => {
     } finally {
         client.close();
     }
-    response.send(rooms);
+    response.send(roomData);
 });
 
 module.exports = router;
