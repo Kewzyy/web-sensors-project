@@ -2,45 +2,26 @@ import { makeStyles } from '@material-ui/core'
 
 export const useStyles = makeStyles(theme => ({
   formControl: {
-    margin: theme.spacing(1),
-    width: 200
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
     width: 200,
+    minWidth: 100,
+    paddingRight: 8,
+    paddingLeft: 8
   },
-  box: {
-    marginLeft: 120,
-    marginRight: 120,
-    marginTop: 30,
-    marginBottom: 50,
-    height: '30vh',
-    paddingLeft: 30,
-    paddingRight: 30,
-    paddingTop: 50,
-    paddingBottom: 50,
-  },
-  graphBox: {
-    backgroundColor: '#F5F5F5',
-    marginLeft: 120,
-    marginRight: 120,
-    marginTop: 30,
-    marginBottom: 50,
-    height: '100vh',
-    paddingLeft: 30,
-    paddingRight: 30,
-    paddingTop: 50,
-    paddingBottom: 50,
-  },
-  pickers: {
+  root: {
     display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+  wrapper: {
+    display: 'flex',
+    // flexDirection: 'column',
+    paddingTop: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkBoxes: {
+    paddingTop: 16,
+    paddingLeft: 24
+  }
 }))

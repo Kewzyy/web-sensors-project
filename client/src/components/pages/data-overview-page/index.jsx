@@ -1,5 +1,5 @@
 import React from 'react'
-import { DataOverviewPage as DOP } from './DatuParskats'
+import { DataOverviewPage as DOP } from './data-overview-page'
 import { Dashboard } from '../../blocks/Dashboard'
 
 export const DataOverviewPage = () => {
