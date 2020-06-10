@@ -11,10 +11,30 @@ export const LandingPage = () => {
       <Paper className={classes.paper}>
         <Typography variant='body1'>Projekta ietvaros realizēti visi sekojošie punkti:</Typography>
         <List>
-          <ListItem>1. Izveidota datu attēlošanas pārskata sadaļa &#9989;</ListItem>
-          <ListItem>2. Izveidota Ēkas plāna un sensoru sadaļa &#9989;</ListItem>
-          <ListItem>3. Izveidota Brīdinājumu sadaļa &#9989;</ListItem>
-          <ListItem>4. Realizēta rēallaika informācijas saņemšana &#9989;</ListItem>
+          <ListItem>
+            1. Izveidota datu attēlošanas pārskata sadaļa
+            <span role='img' aria-label='checkmark-emoji'>
+              &#9989;
+            </span>
+          </ListItem>
+          <ListItem>
+            2. Izveidota Ēkas plāna un sensoru sadaļa
+            <span role='img' aria-label='checkmark-emoji'>
+              &#9989;
+            </span>
+          </ListItem>
+          <ListItem>
+            3. Izveidota Brīdinājumu sadaļa
+            <span role='img' aria-label='checkmark-emoji'>
+              &#9989;
+            </span>
+          </ListItem>
+          <ListItem>
+            4. Realizēta rēallaika informācijas saņemšana
+            <span role='img' aria-label='checkmark-emoji'>
+              &#9989;
+            </span>
+          </ListItem>
         </List>
       </Paper>
     </Dashboard>
