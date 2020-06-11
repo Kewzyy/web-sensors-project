@@ -5,6 +5,14 @@ export const sensorConfig = [
     value: 'co2',
     info: CO2_INFO,
   },
-  { name: 'Mitrums', value: 'mitrums', info: HUM_INFO },
-  { name: 'Temperatūra', value: 'temp', info: TEMP_INFO },
+  {
+    name: 'Mitrums',
+    value: 'humidity',
+    info: HUM_INFO,
+  },
+  {
+    name: 'Temperatūra',
+    value: 'temp',
+    info: TEMP_INFO,
+  },
 ]

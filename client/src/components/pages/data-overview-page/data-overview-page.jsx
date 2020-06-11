@@ -13,15 +13,16 @@ import {
 import { useStyles } from './styles'
 import { anchorRef } from '../../../constants'
 import { DatePicker } from 'components/blocks/Datepicker'
-import { sensorConfig as sensorTypes, detailConfig } from '../../../config'
+import { sensorConfig as sensorTypes, detailConfig, roomConfig } from '../../../config'
 import { useRecoilValue } from 'recoil'
 import { dateTimeRangeState } from '../../../atoms'
-import { Chart } from 'components/blocks/Chart'
+import { Chart } from '../../blocks/Chart'
 
 export const DataOverviewPage = () => {
   const classes = useStyles()
   const [selectedSensor, setSelectedSensor] = React.useState('')
   const [selectedDetail, setSelectedDetail] = React.useState('')
+  const [selectedRoom, setSelectedRoom] = React.useState('')
   const [checkBoxState, setCheckBoxState] = React.useState({
     showAvg: false,
     showDiff: false,
@@ -34,10 +35,10 @@ export const DataOverviewPage = () => {
     })
   }
 
-  console.log('DataOverviewPage -> dateData', dateData)
-  console.log('DataOverviewPage -> selectedSensor', selectedSensor)
-  console.log('DataOverviewPage -> checkBoxState', checkBoxState)
-  console.log('DataOverviewPage -> selectedDetail', selectedDetail)
+  // console.log('DataOverviewPage -> dateData', dateData)
+  // console.log('DataOverviewPage -> selectedSensor', selectedSensor)
+  // console.log('DataOverviewPage -> checkBoxState', checkBoxState)
+  // console.log('DataOverviewPage -> selectedDetail', selectedDetail)
   return (
     <React.Fragment>
       <div className={classes.root}>
@@ -75,6 +76,22 @@ export const DataOverviewPage = () => {
                 })}
             </Select>
           </FormControl>
+          <FormControl className={classes.formControl}>
+            <InputLabel>Telpa</InputLabel>
+            <Select
+              MenuProps={anchorRef}
+              value={selectedRoom}
+              onChange={e => setSelectedRoom(e.target.value)}>
+              {roomConfig &&
+                roomConfig.map(room => {
+                  return (
+                    <MenuItem key={`${room.name}-key`} value={room.value}>
+                      {room.name}
+                    </MenuItem>
+                  )
+                })}
+            </Select>
+          </FormControl>
 
           <FormControl component='fieldset' className={classes.checkBoxes}>
             <FormGroup>
@@ -98,7 +115,7 @@ export const DataOverviewPage = () => {
             </FormGroup>
           </FormControl>
         </div>
-        <Chart></Chart>
+        <Chart />
       </div>
     </React.Fragment>
   )
