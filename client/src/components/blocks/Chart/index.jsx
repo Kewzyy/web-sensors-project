@@ -1,53 +1,42 @@
 import React from 'react'
 
-import { mockApiData } from 'constants/mock-data'
+
 import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar, Legend } from 'recharts'
 import { theme } from 'config/theme'
 
-export const Chart = () => {
-  const filteredData = mockApiData.filter(data => {
-    return data.type === 'mitrums'
-  })
-  console.log('Chart -> filteredData', filteredData)
+export const Chart = ({
+  apiData,
+  timePeriod,
+  selectedPrecision,
+}) => {
 
   const data = []
-
-  filteredData.forEach(o => {
+  
+  
+  apiData.forEach(o => {
     data.push({
+      xAxisLabel: `${o.date} ${o.time}`,
       date: o.date,
-      value: o.value,
+      sensora_vertiba: o.value,
     })
   })
-  const tickFormatterDay = tickItem => {
-    return tickItem
-  }
-  console.log('Chart -> data', data)
-  //TODO:
-  // x-ass formatēšana abām detalizācijas pakāpēm
-  /* 
-  pareizo datu filtrēšana
-    [
-    atlasit laiku, 
-    telpu,
-    sensoru,
-    detalizacijas pakapi,
+  
+  console.log("apiData", apiData)
+  console.log("timePeriod,", timePeriod,)
+  console.log("selectedPrecision", selectedPrecision)
 
-    starpiiba - kaa to reekina?
-    ]
-
-  */
-  const average = data.reduce((total, next) => total + next.value, 0) / data.length
-  console.log('Chart -> average', average)
+  // const average = data.reduce((total, next) => total + next.value, 0) / data.length
+  // console.log('Chart -> average', average)
 
   return (
     data.length > 0 && (
       <BarChart width={800} height={640} data={data}>
         <CartesianGrid />
-        <XAxis dataKey='name' tickFormatter={tickFormatterDay} />
+        <XAxis dataKey='xAxisLabel'/>
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey='value' fill={theme.palette.secondary.main.toString()} />
+        <Bar dataKey='sensora_vertiba' label='test' fill={theme.palette.secondary.main.toString()} />
       </BarChart>
     )
   )

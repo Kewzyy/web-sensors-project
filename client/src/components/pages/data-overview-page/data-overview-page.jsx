@@ -8,6 +8,7 @@ import {
   FormControlLabel,
   Checkbox,
   FormLabel,
+  Button,
 } from '@material-ui/core'
 
 import { useStyles } from './styles'
@@ -17,16 +18,24 @@ import { sensorConfig as sensorTypes, detailConfig, roomConfig } from '../../../
 import { useRecoilValue } from 'recoil'
 import { dateTimeRangeState } from '../../../atoms'
 import { Chart } from '../../blocks/Chart'
+import { mockApiData } from 'constants/mock-data'
 
 export const DataOverviewPage = () => {
   const classes = useStyles()
   const [selectedSensor, setSelectedSensor] = React.useState('')
+  console.log("DataOverviewPage -> selectedSensor", selectedSensor)
   const [selectedDetail, setSelectedDetail] = React.useState('')
   const [selectedRoom, setSelectedRoom] = React.useState('')
   const [checkBoxState, setCheckBoxState] = React.useState({
     showAvg: false,
     showDiff: false,
   })
+  const [chartData, setChartData] = React.useState({
+    data: {},
+    timePeriod: {},
+    selectedPrecision: '',
+  })
+  const [generate, setGenerate] = React.useState(false)
   const dateData = useRecoilValue(dateTimeRangeState)
   const handleCheck = e => {
     setCheckBoxState({
@@ -35,10 +44,6 @@ export const DataOverviewPage = () => {
     })
   }
 
-  // console.log('DataOverviewPage -> dateData', dateData)
-  // console.log('DataOverviewPage -> selectedSensor', selectedSensor)
-  // console.log('DataOverviewPage -> checkBoxState', checkBoxState)
-  // console.log('DataOverviewPage -> selectedDetail', selectedDetail)
   return (
     <React.Fragment>
       <div className={classes.root}>
@@ -115,7 +120,30 @@ export const DataOverviewPage = () => {
             </FormGroup>
           </FormControl>
         </div>
-        <Chart />
+        <Button
+          className={classes.generateChart}
+          variant='contained'
+          color='default'
+          onClick={() => {
+            setGenerate(true)
+            setChartData({
+              // Pass data from api call here
+              // api call generates from selectedSensor and selectedRoom
+              // btw reali slikti api endpointu nosaukumi, par to vien vajadzetu neiskaitits
+              data: mockApiData.filter(data => data.type === selectedSensor),
+              timePeriod: dateData,
+              selectedPrecision: selectedDetail,
+            })
+          }}>
+          Generate chart
+        </Button>
+        {generate && chartData && (
+          <Chart
+            apiData={chartData.data}
+            timePeriod={chartData.timePeriod}
+            selectedPrecision={chartData.selectedPrecision}
+          />
+        )}
       </div>
     </React.Fragment>
   )

@@ -6,6 +6,7 @@ export const useStyles = makeStyles(theme => ({
     minWidth: 100,
     paddingRight: 8,
     paddingLeft: 8,
+    marginTop: 8,
   },
   root: {
     display: 'flex',
@@ -24,5 +25,9 @@ export const useStyles = makeStyles(theme => ({
   checkBoxes: {
     paddingTop: 16,
     paddingLeft: 24,
+  },
+  generateChart: {
+    paddingTop: 8,
+    paddingBottom: 8,
   },
 }))
