@@ -3,6 +3,7 @@ import React from 'react'
 
 import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar, Legend } from 'recharts'
 import { theme } from 'config/theme'
+import { convertTime12to24 } from 'functions'
 
 export const Chart = ({
   apiData,
@@ -24,10 +25,18 @@ export const Chart = ({
 
   let filteredSensorData = sensorData.filter(dateIsInRange, range);
 
-  //sort by date, since api gives data starting from endDate to startDate
+  //sort by date and time, since api gives data starting from endDate to startDate
   filteredSensorData.sort(function(a,b){
-    return new Date(a.date) - new Date(b.date)
-  })
+    if (a.date < b.date) return -1
+    if (a.date > b.date) return 1
+    if (a.date === b.date) {
+      let atime = convertTime12to24(a.time)
+      let btime = convertTime12to24(b.time)
+      if (atime < btime) return -1
+      if (atime > btime) return 1
+      return 0
+    }
+  });
 
   filteredSensorData.forEach(o => {
     data.push({
