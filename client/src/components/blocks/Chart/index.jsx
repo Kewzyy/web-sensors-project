@@ -11,9 +11,25 @@ export const Chart = ({
 }) => {
 
   const data = []
-  
-  
-  apiData.forEach(o => {
+  const sensorData = typeof apiData !== 'undefined' ? apiData : []
+
+  function dateIsInRange(sensor) {
+    return new Date(sensor.date) >= this.startDate && new Date(sensor.date) <= this.endDate;
+  }
+
+  let range = {
+    startDate: new Date(timePeriod.startDate),
+    endDate: new Date(timePeriod.endDate)
+  }
+
+  let filteredSensorData = sensorData.filter(dateIsInRange, range);
+
+  //sort by date, since api gives data starting from endDate to startDate
+  filteredSensorData.sort(function(a,b){
+    return new Date(a.date) - new Date(b.date)
+  })
+
+  filteredSensorData.forEach(o => {
     data.push({
       xAxisLabel: `${o.date} ${o.time}`,
       date: o.date,

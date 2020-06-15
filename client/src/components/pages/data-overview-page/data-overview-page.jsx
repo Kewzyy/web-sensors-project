@@ -19,6 +19,7 @@ import { useRecoilValue } from 'recoil'
 import { dateTimeRangeState } from '../../../atoms'
 import { Chart } from '../../blocks/Chart'
 import { mockApiData } from 'constants/mock-data'
+import { getSensorData } from '../../../apis/requests'
 
 export const DataOverviewPage = () => {
   const classes = useStyles()
@@ -26,6 +27,7 @@ export const DataOverviewPage = () => {
   console.log("DataOverviewPage -> selectedSensor", selectedSensor)
   const [selectedDetail, setSelectedDetail] = React.useState('')
   const [selectedRoom, setSelectedRoom] = React.useState('')
+  const [sensorData, setSensorData] = React.useState([])
   const [checkBoxState, setCheckBoxState] = React.useState({
     showAvg: false,
     showDiff: false,
@@ -42,6 +44,17 @@ export const DataOverviewPage = () => {
       ...checkBoxState,
       [e.target.name]: e.target.checked,
     })
+  }
+
+  const getRoomSensorData = (room, sensorType) => {
+    getSensorData(room, sensorType)
+      .then(response => {
+        setSensorData(response.data)
+        setGenerate(true)
+      })
+      .catch(err => {
+        console.log('Get Sensor Data Err', err)
+      })
   }
 
   return (
@@ -125,12 +138,11 @@ export const DataOverviewPage = () => {
           variant='contained'
           color='default'
           onClick={() => {
-            setGenerate(true)
+            getRoomSensorData(selectedRoom, selectedSensor)
             setChartData({
               // Pass data from api call here
               // api call generates from selectedSensor and selectedRoom
               // btw reali slikti api endpointu nosaukumi, par to vien vajadzetu neiskaitits
-              data: mockApiData.filter(data => data.type === selectedSensor),
               timePeriod: dateData,
               selectedPrecision: selectedDetail,
             })
@@ -139,7 +151,7 @@ export const DataOverviewPage = () => {
         </Button>
         {generate && chartData && (
           <Chart
-            apiData={chartData.data}
+            apiData={sensorData}
             timePeriod={chartData.timePeriod}
             selectedPrecision={chartData.selectedPrecision}
           />

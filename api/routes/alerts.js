@@ -3,19 +3,6 @@ var router = express.Router();
 var dburi = process.env.MONGODB_URI;
 var dbname = "webapp"
 
-function formatAMPM(date) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var seconds = date.getSeconds();
-
-    var ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-    var strTime = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-    return strTime;
-}
-
 router.get('', async(request, response) => {
 
     const MongoClient = require('mongodb').MongoClient;
@@ -43,20 +30,18 @@ router.get('', async(request, response) => {
 
         var thresholdCondition = '';
         var conditionValue = '';
-        var thresholdQuery = null;
+        var thresholdQuery = {};
 
         if(request.query.dateFrom){
-            dateFromISOString = new Date(request.query.dateFrom).toISOString();
+            dateFromISOString = request.query.dateFrom.replace(/["']/g, "");
+            dateFromISOString = new Date(dateFromISOString).toISOString();
             console.log("dateFromISOString", dateFromISOString);
-            dateFromTimeString = formatAMPM(new Date(request.query.dateFrom));
-            console.log("formatAMPM(date)", dateFromTimeString);
         }
 
         if(request.query.dateTo){
-            dateToISOString = new Date(request.query.dateTo).toISOString();
+            dateToISOString = request.query.dateTo.replace(/["']/g, "");
+            dateToISOString = new Date(dateToISOString).toISOString();
             console.log("dateToISOString", dateToISOString);
-            dateToTimeString = formatAMPM(new Date(request.query.dateTo));
-            console.log("formatAMPM(date)", dateToTimeString);
         }
 
         if(request.query.room){
@@ -79,8 +64,6 @@ router.get('', async(request, response) => {
                 var thresholdQuery =  { "$lt": [ "$value", conditionValue ] };
             } else if (thresholdCondition === "gt"){
                 var thresholdQuery =  { "$gt": [ "$value", conditionValue ] };
-            } else {
-                thresholdQuery = {};
             }
         }
 
@@ -110,7 +93,7 @@ router.get('', async(request, response) => {
                                 ]
                             },
                             {
-                                "$lte": [
+                                "$lt": [
                                     {
                                         "$dateFromString": {
                                             "dateString": "$date"

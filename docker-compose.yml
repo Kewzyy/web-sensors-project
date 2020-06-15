@@ -9,6 +9,7 @@ services:
             REACT_APP_API_HOST_URI: ${REACT_APP_API_HOST_URI}
         ports:
             - "3000:3000"
+        stdin_open: true
         volumes:
             - ./client:/client
             - /client/node_modules

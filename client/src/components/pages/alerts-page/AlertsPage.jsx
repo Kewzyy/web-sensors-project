@@ -1,5 +1,4 @@
 import React from 'react'
-import axios from 'axios'
 
 import {
   InputLabel,
@@ -17,7 +16,7 @@ import {
 import { Table } from '../../blocks/Table'
 import { getFormattedDateTime } from '../../../functions'
 
-import { getDistinctRooms } from '../../../apis/requests'
+import { getDistinctRooms, getSensorDataForAlerts } from '../../../apis/requests'
 
 import { columnsConfig } from '../../../config/alert-table-columns'
 import { mockedData } from './mockedData'
@@ -60,16 +59,7 @@ export const AlertsPage = () => {
 
   // Almost beauty
   React.useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_API_HOST_URI + '/alerts', {
-        params: {
-          dateFrom: selectedFromDate,
-          dateTo: selectedToDate,
-          room: room,
-          type: sensorType,
-          condition: thresholdCondition + '-' + conditionValue,
-        },
-      })
+    getSensorDataForAlerts(selectedFromDate, selectedToDate, room, sensorType, thresholdCondition, conditionValue)
       .then(response => {
         setAlertData(response.data)
       })
