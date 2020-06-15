@@ -79,22 +79,6 @@ export const DataOverviewPage = () => {
             </Select>
           </FormControl>
           <FormControl className={classes.formControl}>
-            <InputLabel> Detalizācijas pakāpe</InputLabel>
-            <Select
-              MenuProps={anchorRef}
-              value={selectedDetail}
-              onChange={e => setSelectedDetail(e.target.value)}>
-              {detailConfig &&
-                detailConfig.map(detail => {
-                  return (
-                    <MenuItem key={`${detail.name}-key`} value={detail.value}>
-                      {detail.name}
-                    </MenuItem>
-                  )
-                })}
-            </Select>
-          </FormControl>
-          <FormControl className={classes.formControl}>
             <InputLabel>Telpa</InputLabel>
             <Select
               MenuProps={anchorRef}
@@ -120,16 +104,6 @@ export const DataOverviewPage = () => {
                 }
                 label='Vidējais patēriņš par periodu'
               />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkBoxState.showDiff}
-                    onChange={handleCheck}
-                    name='showDiff'
-                  />
-                }
-                label='Starpība ar iepriekšējo periodu'
-              />
             </FormGroup>
           </FormControl>
         </div>
@@ -154,6 +128,7 @@ export const DataOverviewPage = () => {
             apiData={sensorData}
             timePeriod={chartData.timePeriod}
             selectedPrecision={chartData.selectedPrecision}
+            optionsState={checkBoxState}
           />
         )}
       </div>

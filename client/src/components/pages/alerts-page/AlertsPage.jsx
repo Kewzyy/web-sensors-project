@@ -230,11 +230,6 @@ export const AlertsPage = () => {
               </ListItem>
             </List>
           </Grid>
-          <Grid container justify='center' className={classes.alertDataRuleGrid}>
-            <Typography component={'span'} variant='body2'>
-              {`?dateFrom=${selectedFromDate}&dateTo=${selectedToDate}&room=${room}&type=${sensorType}&condition=${thresholdCondition}-${conditionValue}`}
-            </Typography>
-          </Grid>
         </Grid>
 
         <Grid item xs={12}>

@@ -4,11 +4,13 @@ import React from 'react'
 import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar, Legend } from 'recharts'
 import { theme } from 'config/theme'
 import { convertTime12to24 } from 'functions'
+import { Typography } from '@material-ui/core'
 
 export const Chart = ({
   apiData,
   timePeriod,
   selectedPrecision,
+  optionsState,
 }) => {
 
   const data = []
@@ -34,9 +36,19 @@ export const Chart = ({
       let btime = convertTime12to24(b.time)
       if (atime < btime) return -1
       if (atime > btime) return 1
-      return 0
     }
-  });
+    return 0
+  })
+
+  const values = filteredSensorData.map(sensorDataObj => sensorDataObj.value);
+  function addValues(runningTotal, value) {
+    return runningTotal + parseInt(value, 10);
+  }
+
+  const valuesTotal = values.reduce(addValues, 0);
+  const averageSensorDataValue = valuesTotal / values.length;
+  console.log("averageSensorDataValue: ", averageSensorDataValue)
+  console.log("optionsState.showAvg: ", optionsState.showAvg)
 
   filteredSensorData.forEach(o => {
     data.push({
@@ -55,14 +67,22 @@ export const Chart = ({
 
   return (
     data.length > 0 && (
-      <BarChart width={800} height={640} data={data}>
-        <CartesianGrid />
-        <XAxis dataKey='xAxisLabel'/>
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey='sensora_vertiba' label='test' fill={theme.palette.secondary.main.toString()} />
-      </BarChart>
+      <React.Fragment>
+        { optionsState.showAvg ?
+          <Typography variant='overline' style={{ margin: '10px' }}>
+            Vidējā vērtiba periodā: {averageSensorDataValue}
+          </Typography>
+        : null
+        }
+        <BarChart width={800} height={640} data={data}>
+          <CartesianGrid />
+          <XAxis dataKey='xAxisLabel'/>
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey='sensora_vertiba' label='test' fill={theme.palette.secondary.main.toString()} />
+        </BarChart>
+      </React.Fragment>
     )
   )
 }
