@@ -24,10 +24,23 @@ import { getSensorData } from '../../../apis/requests'
 export const DataOverviewPage = () => {
   const classes = useStyles()
   const [selectedSensor, setSelectedSensor] = React.useState('')
-  console.log("DataOverviewPage -> selectedSensor", selectedSensor)
   const [selectedDetail, setSelectedDetail] = React.useState('')
-  const [selectedRoom, setSelectedRoom] = React.useState('')
+  const [selectedRoomNames, setSelectedRoomNames] = React.useState(null)
+
+  const [selectedRoomsState, setSelectedRoomsState] = React.useState({
+    servertelpa: false,
+    telpa14: false,
+    telpa13: false,
+    videotelpa: false,
+    dispecertelpa: false,
+  })
+
+  const handleRoomsCheck = e => {
+    setSelectedRoomsState({ ...selectedRoomsState, [e.target.name]: e.target.checked })
+  }
+
   const [sensorData, setSensorData] = React.useState([])
+
   const [checkBoxState, setCheckBoxState] = React.useState({
     showAvg: false,
     showDiff: false,
@@ -46,15 +59,34 @@ export const DataOverviewPage = () => {
     })
   }
 
-  const getRoomSensorData = (room, sensorType) => {
-    getSensorData(room, sensorType)
-      .then(response => {
-        setSensorData(response.data)
-        setGenerate(true)
-      })
-      .catch(err => {
-        console.log('Get Sensor Data Err', err)
-      })
+  const getRoomSensorData = () => {
+    var selectedRooms = []
+    if (selectedRoomsState.servertelpa) selectedRooms.push('Servertelpa')
+    if (selectedRoomsState.telpa14) selectedRooms.push('14telpa')
+    if (selectedRoomsState.telpa13) selectedRooms.push('13telpa')
+    if (selectedRoomsState.videotelpa) selectedRooms.push('Videotelpa')
+    if (selectedRoomsState.dispecertelpa) selectedRooms.push('Dispecerutelpa')
+
+    setSelectedRoomNames(selectedRooms)
+
+    let requestsProcessed = 0
+    console.log("selectedRooms", selectedRooms)
+
+    let retrievedSensorData = []
+    selectedRooms.forEach(async (room, index) => {
+      getSensorData(room, selectedSensor)
+        .then(response => {
+          retrievedSensorData.push(response.data)
+          requestsProcessed++
+          if(requestsProcessed === selectedRooms.length) {
+            setSensorData(retrievedSensorData)
+            setGenerate(true)
+          }
+        })
+        .catch(err => {
+          console.log('Get Sensor Data Err', err)
+        })
+    })
   }
 
   return (
@@ -62,6 +94,43 @@ export const DataOverviewPage = () => {
       <div className={classes.root}>
         <DatePicker />
         <div className={classes.wrapper}>
+
+          <FormControl component='fieldset' className={classes.checkBoxes}>
+            <FormGroup>
+              <FormLabel component='legend'>Diagrammā iekļaujamās telpas</FormLabel>
+              <FormControlLabel
+                control={
+                  <Checkbox checked={selectedRoomsState.servertelpa} onChange={handleRoomsCheck} name='servertelpa' />
+                }
+                label='Servertelpa'
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox checked={selectedRoomsState.telpa14} onChange={handleRoomsCheck} name='telpa14' />
+                }
+                label='14telpa'
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox checked={selectedRoomsState.videotelpa} onChange={handleRoomsCheck} name='videotelpa' />
+                }
+                label='VideoTelpa'
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox checked={selectedRoomsState.dispecertelpa} onChange={handleRoomsCheck} name='dispecertelpa' />
+                }
+                label='DispeceruTelpa'
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox checked={selectedRoomsState.telpa13} onChange={handleRoomsCheck} name='telpa13' />
+                }
+                label='13telpa'
+              />
+            </FormGroup>
+          </FormControl>
+
           <FormControl className={classes.formControl}>
             <InputLabel> Sensora tips</InputLabel>
             <Select
@@ -73,22 +142,6 @@ export const DataOverviewPage = () => {
                   return (
                     <MenuItem key={`${sensor.name}-key`} value={sensor.value}>
                       {sensor.name}
-                    </MenuItem>
-                  )
-                })}
-            </Select>
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <InputLabel>Telpa</InputLabel>
-            <Select
-              MenuProps={anchorRef}
-              value={selectedRoom}
-              onChange={e => setSelectedRoom(e.target.value)}>
-              {roomConfig &&
-                roomConfig.map(room => {
-                  return (
-                    <MenuItem key={`${room.name}-key`} value={room.value}>
-                      {room.name}
                     </MenuItem>
                   )
                 })}
@@ -112,7 +165,7 @@ export const DataOverviewPage = () => {
           variant='contained'
           color='default'
           onClick={() => {
-            getRoomSensorData(selectedRoom, selectedSensor)
+            getRoomSensorData()
             setChartData({
               // Pass data from api call here
               // api call generates from selectedSensor and selectedRoom
@@ -129,6 +182,7 @@ export const DataOverviewPage = () => {
             timePeriod={chartData.timePeriod}
             selectedPrecision={chartData.selectedPrecision}
             optionsState={checkBoxState}
+            selectedRoomNames={selectedRoomNames}
           />
         )}
       </div>

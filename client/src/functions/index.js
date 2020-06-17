@@ -34,3 +34,43 @@ export const convertTime12to24 = (time12h) => {
   }
   return `${hours}:${minutes}:${seconds}`;
 }
+
+export const getDataFilteredByDate = (sensorData, timePeriod) => {
+  function dateIsInRange(sensor) {
+    return new Date(sensor.date) >= this.startDate && new Date(sensor.date) <= this.endDate;
+  }
+
+  let range = {
+    startDate: new Date(timePeriod.startDate),
+    endDate: new Date(timePeriod.endDate)
+  }
+
+  return sensorData.filter(dateIsInRange, range);
+}
+
+export const getSortedData = (data) => {
+  return data.sort(function(a,b){
+    if (a.date < b.date) return -1
+    if (a.date > b.date) return 1
+    if (a.date === b.date) {
+      let atime = convertTime12to24(a.time)
+      let btime = convertTime12to24(b.time)
+      if (atime < btime) return -1
+      if (atime > btime) return 1
+    }
+    return 0
+  })
+}
+
+export const getAverageFromFilteredSensorData = (sensorData) => {
+
+  const values = sensorData.map(sensorDataObj => sensorDataObj.value)
+  const roomName = sensorData[0].room
+  function addValues(runningTotal, value) {
+    return runningTotal + parseInt(value, 10);
+  }
+
+  const valuesTotal = values.reduce(addValues, 0)
+  const averageSensorDataValue = valuesTotal / values.length
+  return { room: roomName, average: averageSensorDataValue }
+}
