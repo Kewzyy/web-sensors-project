@@ -74,3 +74,42 @@ export const getAverageFromFilteredSensorData = (sensorData) => {
   const averageSensorDataValue = valuesTotal / values.length
   return { room: roomName, average: averageSensorDataValue }
 }
+
+export const getRandomColor = () => {
+  var letters = '0123456789ABC';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 13)];
+  }
+  return color;
+}
+
+export const dateTimeExistsInArray = (value, data) => {
+  for (var i = 0; i < data.length; i++) {
+    var dateValue = data[i];
+    if(dateValue.datetime === value) return true;
+  }
+  return false;
+}
+
+export const getDateTimeObjectArray = (filteredRoomData) => {
+  let dateTimeObjArray = []
+
+  filteredRoomData.forEach(roomDataArray => {
+    // for each room
+    roomDataArray.forEach(roomSensorData => {
+      // for each data in this room
+        //store unique datetime
+      let datetime = `${roomSensorData.date} ${roomSensorData.time}`
+      if(!dateTimeExistsInArray(datetime, dateTimeObjArray)) {
+        let dateTimeJson = {
+          date: roomSensorData.date,
+          time: roomSensorData.time,
+          datetime: datetime,
+        }
+        dateTimeObjArray.push(dateTimeJson)
+      }
+    })
+  })
+  return getSortedData(dateTimeObjArray)
+}

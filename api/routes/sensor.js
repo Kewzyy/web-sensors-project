@@ -67,7 +67,7 @@ MongoClient.connect(url, function(err, db) {
 
   dbo.collection("sensors").insertOne(sensorToInsert, function(err,r) {
       if (err) throw err;
-      console.log(sensorToInsert);
+      //console.log(sensorToInsert);
       res.json(sensorToInsert)
       db.close();
     });

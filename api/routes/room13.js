@@ -14,7 +14,7 @@ MongoClient.connect(url, function(err, db) {
   var query = { room: "13telpa" };
   dbo.collection("sensors").find(query).toArray(function(err, result) {
     if (err) throw err;
-    console.log(result);
+    //console.log(result);
     response.json(result)
     db.close();
   });

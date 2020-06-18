@@ -1,13 +1,22 @@
 import React from 'react'
 
 
-import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar, Legend } from 'recharts'
-import { theme } from 'config/theme'
 import {
-  convertTime12to24,
+  LineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend
+} from 'recharts'
+
+import {
   getDataFilteredByDate,
   getSortedData,
   getAverageFromFilteredSensorData,
+  getRandomColor,
+  getDateTimeObjectArray,
 } from 'functions'
 
 import { Typography } from '@material-ui/core'
@@ -24,7 +33,7 @@ export const Chart = ({
 
   /*
   // sensorData structure
-  data = [
+  [
    [
         {
             "_id": "5ee7293996b29c00109ff4c3",
@@ -50,10 +59,8 @@ export const Chart = ({
   ]
 
   */
-  //console.log("Chart sensorData: ", sensorData)
 
   let averages = []
-
   let filteredRoomData = []
   sensorData.forEach(roomdata => {
     let dateFilteredSensorData = getDataFilteredByDate(roomdata, timePeriod)
@@ -67,53 +74,50 @@ export const Chart = ({
   console.log("selectedRoomNames: ", selectedRoomNames)
   console.log("averages: ", averages)
 
-  //const data = []
+  let dateTimeObjArray = getDateTimeObjectArray(filteredRoomData)
+  console.log("dateTimeObjArray: ", dateTimeObjArray)
 
-  /*filteredSensorData.forEach(o => {
-    data.push({
-      xAxisLabel: `${o.date} ${o.time}`,
-      date: o.date,
-      sensora_vertiba: o.value,
+  dateTimeObjArray.forEach(datetime => {
+    // for each datetime
+    filteredRoomData.forEach(roomDataArray => {
+      //for each room
+      roomDataArray.forEach(roomSensorData => {
+        // for each sensor data and datetime add room and its value
+        if(roomSensorData.date === datetime.date && roomSensorData.time === datetime.time){
+          datetime[roomSensorData.room] = roomSensorData.value
+        }
+      })
     })
   })
-  */
-  const data = [
-    {
-      name: 'Page A', uv: 4000, pv: 2400, amt: 2400,
-    },
-    {
-      name: 'Page B', uv: 3000, pv: 1398, amt: 2210,
-    },
-    {
-      name: 'Page C', uv: 2000, pv: 9800, amt: 2290,
-    },
-    {
-      name: 'Page D', uv: 2780, pv: 3908, amt: 2000,
-    },
-    {
-      name: 'Page E', uv: 1890, pv: 4800, amt: 2181,
-    },
-    {
-      name: 'Page F', uv: 2390, pv: 3800, amt: 2500,
-    },
-    {
-      name: 'Page G', uv: 3490, pv: 4300, amt: 2100,
-    },
-  ];
 
+  console.log("dateTimeObjArray: ", dateTimeObjArray)
+  const data = dateTimeObjArray
 
   return (
     data.length > 0 && (
       <React.Fragment>
-        <BarChart width={800} height={640} data={data}>
+        { optionsState.showAvg ?
+          (averages.map((avgobj, index) => {
+            return (
+              <Typography key={index} variant='overline' style={{ margin: '10px' }}>
+                Vidējā vērtiba telpai: {avgobj.room} - {avgobj.average}
+              </Typography>
+            )
+          }))
+        : null
+        }
+        <LineChart width={800} height={640} data={data}>
           <CartesianGrid />
-          <XAxis dataKey='xAxisLabel'/>
+          <XAxis dataKey='datetime'/>
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="pv" stackId="a" fill="#8884d8" />
-          <Bar dataKey="uv" stackId="a" fill="#82ca9d" />
-        </BarChart>
+          {
+          	filteredRoomData.map((sensorData, index) => {
+              return <Line type="monotone" key={index} dataKey={sensorData[0].room} stroke={getRandomColor()} />
+            })
+          }
+        </LineChart>
       </React.Fragment>
     )
   )

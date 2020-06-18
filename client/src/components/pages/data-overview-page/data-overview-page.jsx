@@ -18,7 +18,6 @@ import { sensorConfig as sensorTypes, detailConfig, roomConfig } from '../../../
 import { useRecoilValue } from 'recoil'
 import { dateTimeRangeState } from '../../../atoms'
 import { Chart } from '../../blocks/Chart'
-import { mockApiData } from 'constants/mock-data'
 import { getSensorData } from '../../../apis/requests'
 
 export const DataOverviewPage = () => {
@@ -98,36 +97,18 @@ export const DataOverviewPage = () => {
           <FormControl component='fieldset' className={classes.checkBoxes}>
             <FormGroup>
               <FormLabel component='legend'>Diagrammā iekļaujamās telpas</FormLabel>
-              <FormControlLabel
-                control={
-                  <Checkbox checked={selectedRoomsState.servertelpa} onChange={handleRoomsCheck} name='servertelpa' />
-                }
-                label='Servertelpa'
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox checked={selectedRoomsState.telpa14} onChange={handleRoomsCheck} name='telpa14' />
-                }
-                label='14telpa'
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox checked={selectedRoomsState.videotelpa} onChange={handleRoomsCheck} name='videotelpa' />
-                }
-                label='VideoTelpa'
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox checked={selectedRoomsState.dispecertelpa} onChange={handleRoomsCheck} name='dispecertelpa' />
-                }
-                label='DispeceruTelpa'
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox checked={selectedRoomsState.telpa13} onChange={handleRoomsCheck} name='telpa13' />
-                }
-                label='13telpa'
-              />
+
+              { roomConfig.map((room, index) => {
+                return (
+                  <FormControlLabel
+                    control={
+                      <Checkbox onChange={handleRoomsCheck} name={room.value} />
+                    }
+                    label={room.name}
+                    key={index}
+                  />)
+              })}
+
             </FormGroup>
           </FormControl>
 
